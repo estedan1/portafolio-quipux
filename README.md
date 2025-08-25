@@ -6,3 +6,4 @@ Bienvenidos futuros ingenieros
 Les recomiendo este curso que realice sobre como usar git por si tienen alguna duda y para actualizar sus portafolios.
 - [Git y GitHub, trabaja con equipos multidisciplinarios, curso práctico desde cero](https://youtu.be/GiD0CizQrX8)# portafolio-quipux
 # portafolio-quipux
+# portafolio-quipux
