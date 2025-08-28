@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>Sebastian Agudelo - Portafolio Profesional</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFA500;
+            --dark-black: #0a0a0a;
+            --light-black: #1a1a1a;
+            --accent-gold: #FFED4E;
+            --text-light: #f5f5f5;
+            --text-gold: #FFD700;
+            --gradient-primary: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a1810 100%);
+            --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            --bill-eye: #ffff00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ====== PANTALLA DE CARGA  ====== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-bar-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: #222;
+            border-top: 3px solid #ff0000;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 15px;
+            overflow: hidden;
+        }
+
+        .loading-track {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff0000, #ff6f6f);
+            transition: width 4s linear;
+        }
+
+        .glove {
+            position: absolute;
+            bottom: 35px;
+            left: 10px;
+            font-size: 40px;
+            transform: translateX(0);
+            animation: moveGlove 6s linear backwards;
+            rotate: 90deg;
+        }
+
+        .bag {
+            position: absolute;
+            bottom: 30px;
+            right: 15px;
+            width: 40px;
+            height: 60px;
+            background: #ff0000;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px #550000;
+        }
+
+        @keyframes moveGlove {
+            0% { transform: translateY(0); }
+            90% { transform: translateY(calc(-100vw - 90px)); }
+            100% { transform: translateY(calc(-100vw - 90px)) scale(1.2); }
+        }
+
+        /* ====== BILL CIPHER EYE TRANSITION ====== */
+        .bill-eye-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-black);
+            z-index: 8888;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s ease;
+        }
+
+        .bill-eye-transition.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bill-eye {
+            width: 200px;
+            height: 200px;
+            background: var(--bill-eye);
+            border-radius: 50%;
+            position: relative;
+            animation: eyePulse 0.6s ease-in-out;
+            box-shadow: 0 0 100px var(--bill-eye);
+        }
+
+        .bill-eye::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            background: var(--dark-black);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes eyePulse {
+            0%, 100% { transform: scale(0.8); }
+            50% { transform: scale(1.2); }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-primary);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: 50%;
+            color: var(--dark-black);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+        }
+
+        .home-button.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .home-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, #FFED4E 0%, #FFD700 100%);
+        }
+
+        .navbar {
+            background: rgba(10, 10, 10, 0.95) !important;
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--primary-gold);
+            transition: all 0.4s ease;
+            padding: 1.2rem 0;
+        }
+
+        .navbar.scrolled {
+            background: var(--dark-black) !important;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 2rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.4s ease;
+            margin: 0 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-gold) !important;
+            transform: translateY(-3px);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .section {
+            opacity: 0;
+            transform: translateY(100px) scale(0.95);
+            transition: all 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .hero-section {
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            animation: particleFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { 
+                transform: translateY(100px) rotate(0deg); 
+                opacity: 0; 
+            }
+            50% { 
+                transform: translateY(-200px) rotate(360deg); 
+                opacity: 0.8; 
+            }
+        }
+
+        .avatar {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            border: 6px solid var(--primary-gold);
+            box-shadow: 0 0 80px rgba(255, 215, 0, 0.6);
+            margin: 0 auto 50px;
+            transition: all 0.8s ease;
+            animation: avatarFloat 5s ease-in-out infinite;
+            object-fit: cover;
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            animation: titleGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+            100% { filter: drop-shadow(0 0 60px rgba(255, 215, 0, 0.9)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 25px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-hero {
+            padding: 18px 35px;
+            border: 3px solid var(--primary-gold);
+            background: transparent;
+            color: var(--primary-gold);
+            font-weight: 800;
+            border-radius: 60px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.5s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-gold);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn-hero:hover::before {
+            left: 0;
+        }
+
+        .btn-hero:hover {
+            color: var(--dark-black);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5);
+            border-color: var(--accent-gold);
+        }
+
+        .experience-section {
+            background: var(--light-black);
+        }
+
+        .experience-card {
+            background: linear-gradient(135deg, var(--dark-black), var(--light-black));
+            border: 3px solid var(--primary-gold);
+            border-radius: 25px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            transition: all 0.8s ease;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .experience-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 80px rgba(255, 215, 0, 0.3);
+        }
+
+        .experience-header {
+            padding: 35px;
+            background: var(--gradient-gold);
+            color: var(--dark-black);
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .experience-header h3 {
+            font-weight: 900;
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .expand-icon {
+            transition: all 0.5s ease;
+            font-size: 1.5rem;
+        }
+
+        .experience-card.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .experience-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.8s ease;
+            background: var(--dark-black);
+        }
+
+        .experience-card.expanded .experience-content {
+            max-height: 1500px;
+            padding: 50px;
+        }
+
+        .achievement-item {
+            background: linear-gradient(135deg, var(--light-black), rgba(255, 215, 0, 0.08));
+            padding: 25px;
+            border-radius: 20px;
+            margin: 20px 0;
+            border-left: 6px solid var(--primary-gold);
+            transition: all 0.6s ease;
+        }
+
+        .achievement-item:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .tech-item {
+            background: var(--gradient-gold);
+            color: var(--dark-black);
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            font-weight: 800;
+            transition: all 0.5s ease;
+        }
+
+        .tech-item:hover {
+            transform: scale(1.15);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 100px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 150px;
+            height: 6px;
+            background: var(--gradient-gold);
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .education-card, .skills-card, .contact-card {
+            background: linear-gradient(135deg, var(--dark-black), var(--light-black));
+            border: 3px solid var(--primary-gold);
+            border-radius: 25px;
+            padding: 45px;
+            transition: all 0.8s ease;
+            height: 100%;
+        }
+
+        .education-card:hover, .skills-card:hover, .contact-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 30px 100px rgba(255, 215, 0, 0.4);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .skill-item {
+            background: var(--gradient-gold);
+            color: var(--dark-black);
+            padding: 30px 20px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: 800;
+            transition: all 0.6s ease;
+            cursor: pointer;
+        }
+
+        .skill-item:hover {
+            transform: translateY(-15px) scale(1.15);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 20px;
+            transition: all 0.6s ease;
+            border-left: 4px solid var(--primary-gold);
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 215, 0, 0.25);
+            transform: scale(1.08) translateX(10px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .contact-item i {
+            color: var(--primary-gold);
+            font-size: 1.8rem;
+            margin-right: 20px;
+            width: 35px;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, var(--dark-black), var(--light-black));
+            border-top: 4px solid var(--primary-gold);
+            padding: 80px 0 40px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-gold);
+            color: var(--dark-black);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 70px;
+            margin: 0 20px;
+            transition: all 0.6s ease;
+            font-size: 1.8rem;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-15px) scale(1.3);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem; }
+            .section-title h2 { font-size: 2.8rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .btn-hero { width: 100%; max-width: 320px; justify-content: center; }
+            .avatar { width: 200px; height: 200px; }
+            .home-button { top: 80px; right: 20px; width: 50px; height: 50px; font-size: 1.4rem; }
+        }
+
+        ::-webkit-scrollbar { width: 15px; }
+        ::-webkit-scrollbar-track { background: var(--dark-black); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--gradient-gold); 
+            border-radius: 10px; 
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 120px;
+            right: 30px;
+            padding: 18px 28px;
+            border-radius: 15px;
+            font-weight: 700;
+            z-index: 9999;
+            transform: translateX(400px);
+            transition: all 0.5s ease;
+            max-width: 350px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-success { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
+        .notification-info { background: var(--gradient-gold); color: var(--dark-black); }
+        .notification-error { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-bar-container">
+            <div class="loading-track">
+                <div class="progress" id="loadingProgress"></div>
+            </div>
+            <div class="glove">🥊</div>
+            <div class="bag"></div>
+        </div>
+    </div>
+
+    <!-- Bill Cipher Eye Transition -->
+    <div class="bill-eye-transition" id="billEyeTransition">
+        <div class="bill-eye"></div>
+    </div>
+
+    <!-- Home Button -->
+    <button class="home-button" id="homeButton" onclick="scrollToTop()">
+        <i class="fas fa-home"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experiencia">Logros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#educacion">Educación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main style="display: none;" id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero-section section visible" id="inicio">
+            <div class="hero-particles"></div>
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="text-center text-lg-start">
+                            <img class="avatar"  src="avatar.jpg" alt="foto" width="280" height="auto"/>
+                            <h1 class="hero-title">Esteban Perez </h1>
+                            <p class="hero-subtitle">
+                                Estudiante del INEM José Félix de Restrepo, en procesos matemáticos 
+                                Deportista con amplios conocimientos en desarrollo personal, voleibol, 
+                                boxeo, videojuegos, cine y música.
+                            </p>
+                            
+                            <div class="hero-buttons">
+                                <a href="#experiencia" class="btn-hero">
+                                    <i class="fas fa-briefcase"></i>Ver Experiencia
+                                </a>
+                                <a href="#contacto" class="btn-hero">
+                                    <i class="fas fa-envelope"></i>Contáctame
+                                </a>
+                                <button class="btn-hero" onclick="shareProfile()">
+                                    <i class="fas fa-share-alt"></i>Compartir
+                                </button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="text-center">
+                            <div class="skills-preview">
+                                <div class="skill-item mb-3" style="display: inline-block; margin: 15px;">
+                                    <i class="fas fa-code me-2"></i>Programación
+                                </div>
+                                <div class="skill-item mb-3" style="display: inline-block; margin: 15px;">
+                                    <i class="fas fa-volleyball-ball me-2"></i>Voleibol
+                                </div>
+                                <div class="skill-item mb-3" style="display: inline-block; margin: 15px;">
+                                    <i class="fas fa-fist-raised me-2"></i>Matemáticas
+                                </div>
+                                <div class="skill-item mb-3" style="display: inline-block; margin: 15px;">
+                                    <i class="fas fa-gamepad me-2"></i>Videojuegos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experiencia -->
+        <section class="section experience-section" id="experiencia">
+            <div class="container">
+                <div class="section-title">
+                    <h2><i class="fas fa-briefcase me-3"></i>Logros</h2>
+                </div>
+                
+                <div class="experience-card" onclick="toggleExperience(this)">
+                    <div class="experience-header">
+                        <h3>Matematicas<i class="fas fa-chevron-down expand-icon"></i></h3>
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-bold">INEM - Colombia</span>
+                            <span class="fw-bold">jul. 2023 - actualidad</span>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <div class="achievement-item">
+                            <h5><i class="fas fa-star text-warning me-2"></i>Estudiante de procesos matematicos</h5>
+                            <p>Actualmente estoy cursando la media tecnica de procesos matematicos la cual profundiza en las matemáticas.
+                                lo cual me da un amplios conocimientos en el area de las matematicas y la logica, esto lo cual me a ayudado a desarrollar unas buenas bases dentro de la programacion.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="experience-card" onclick="toggleExperience(this)">
+                    <div class="experience-header">
+                        <h3>Logros<i class="fas fa-chevron-down expand-icon"></i></h3>
+                        <div class="d-flex justify-content-between">
+                            <span class="fw-bold">actualidad</span>
+                        </div>
+                    </div>
+                    <div class="experience-content">
+                        <div class="achievement-item">
+                            <h5><i class="fas fa-rocket text-warning me-2"></i>Logros Destacados</h5>
+                            <ul>
+                                <li>Lideré varios proyectos y trabajos dentro mi experiencia en el colegio</li>
+                                <li>Un buen desarrollo en el ingles siendo uno de los mejores dentro de la seccion</li>
+                                <li>Actualmente competir contra personas que estudian programacion o estan cursando una tecnica en programacion, sin previos conocimientos y con un aprendizaje autodidacta</li>
+                                <li>He participado en varios torneos de voleibol</li>
+                            </ul>
+                        </div>
+                        <div class="tech-stack">
+                            <div class="tech-item">Adaptable</div>
+                            <div class="tech-item">Sociable</div>
+                            <div class="tech-item">Amable</div>
+                            <div class="tech-item">Responsable</div>
+                            <div class="tech-item">Trabajo en equipo</div>
+                            <div class="tech-item">aprendizaje activo</div>
+                            <div class="tech-item">Pensamiento analitico</div>
+                            <div class="tech-item">Comunicación efectiva</div>
+                            <div class="tech-item">Resolución de problemas</div>
+                            <div class="tech-item">Manejo de estres</div>
+                            <div class="tech-item">Manejo de emociones</div>
+                            <div class="tech-item">Paciencia</div>
+                            <div class="tech-item">Disciplina</div>
+                            <div class="tech-item">Empatía</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="section" id="educacion">
+            <div class="container">
+                <div class="section-title">
+                    <h2><i class="fas fa-graduation-cap me-3"></i>Educación</h2>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="education-card">
+                            <h3 class="mb-3" style="color: var(--primary-gold);">
+                                <i class="fas fa-university me-2"></i>Procesos Matemáticos
+                            </h3>
+                            <h5 style="color: var(--secondary-gold); margin-bottom: 20px;">
+                                INEM José Félix de Restrepo
+                            </h5>
+                            <p class="text-muted mb-3">jul. 2023 - actualidad</p>
+                            <p>Estudiante destacado por sentido de pertenencia, disciplina y liderazgo estudiantil en procesos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="education-card">
+                            <h3 class="mb-3" style="color: var(--primary-gold);">
+                                <i class="fas fa-laptop-code me-2"></i>Cursos
+                            </h3>
+                            <h5 style="color: var(--secondary-gold); margin-bottom: 20px;">
+                                Internet
+                            </h5>
+                            <p class="text-muted mb-3">mar. 2020 - actualidad</p>
+                            <div>
+                                <div class="mb-3">
+                                    <i class="fas fa-medal text-warning me-2"></i>
+                                    <strong>curso de ingles </strong> curso de ingles b2
+                                </div>
+                                <div>
+                                    <i class="fas fa-robot text-warning me-2"></i>
+                                    <strong>Curso de IA</strong> curso de introducción a la inteligencia artificial
+                                </div>
+                                <div>
+                                    <i class="fas fa-robot text-warning me-2"></i>
+                                    <strong>curso de platzi</strong> curso de introducción a la programacion
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" id="contacto">
+            <div class="container">
+                <div class="section-title">
+                    <h2><i class="fas fa-address-card me-3"></i>Contacto</h2>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="skills-card">
+                            <h3 class="mb-4" style="color: var(--primary-gold);">
+                                <i class="fas fa-tools me-2"></i>Habilidades Técnicas 
+                            </h3>
+                            <div class="skills-grid">
+                                <div class="skill-item"><i class="fab fa-java me-2"></i>Java</div>
+                                <div class="skill-item"><i class="fab fa-angular me-2"></i>Python</div>
+                                <div class="skill-item"><i class="fas fa-database me-2"></i>Html</div>
+                                <div class="skill-item"><i class="fas fa-users me-2"></i>Css</div>
+                                <div class="skill-item"><i class="fas fa-chalkboard-teacher me-2"></i>IA</div>
+                                <div class="skill-item"><i class="fas fa-handshake me-2"></i>Finanzas</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="contact-card">
+                            <h3 class="mb-4" style="color: var(--primary-gold);">
+                                <i class="fas fa-phone-alt me-2"></i>Información de Contacto
+                            </h3>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-user"></i>
+                                <span>Esteban Perez</span>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+57 3005772245</span>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>estebanperezvergara@gmail.com</span>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Medellín, Colombia</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Philosophy Section -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="education-card">
+                            <h3 class="text-center mb-4" style="color: var(--primary-gold);">
+                                <i class="fas fa-heart me-3"></i>Pasiones y Filosofía
+                            </h3>
+                            <p class="text-center lead" style="line-height: 1.8;">
+                                Soy una persona la cual le gusta mucho la musica, mi cnatante favorito es milo j y es por que es una persona de admirar ya que con su edad haya logrado tantas cosas y tanta fortuna, es algo que nos demuestra que nada es imposible,mi filosifia es serguir intentando hasta que se pueda soy una personala cual puede legar a ser terca pero muchas veces cambio de opinion rapido, me gusta el voley el boxeo los deportes en general, practico calistenia, y mi mayor filosifia es la es el estoicismo soy una persona muy tranquila que maneja mucho sus emociones y sabe estar tranquilo.
+                            </p>
+                            <p class="text-center" style="color: var(--primary-gold); font-weight: 600;">
+                                puedo adaptarme a cualquier situacion y aprender rapido, me gusta mucho aprender cosas nuevas y soy muy competitivo siempre estoy en busca de nuevos conocimientos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-12 mb-4">
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/estedan1" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        <!-- el unico link que tiene es el de github :-D-->
+                    </div>
+                </div>
+                <div class="col-12">
+                    <p style="color: var(--primary-gold); font-weight: 600;">
+                        © 2025 Esteban Perez. Todos los derechos reservados.
+                        <br><small style="color: var(--text-light);">Diseñado con amor</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let isTransitioning = false;
+
+        // Loading screen functionality
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            const progress = document.getElementById('loadingProgress');
+            
+            // Start progress animation
+            setTimeout(() => {
+                progress.style.width = '100%';
+            }, 500);
+            
+            // Hide loading screen and show main content
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                mainContent.style.display = 'block';
+                
+                // Initialize animations after loading
+                setTimeout(() => {
+                    initializeAnimations();
+                }, 500);
+            }, 4500);
+        });
+
+        // Bill Cipher eye transition
+        function showBillEyeTransition() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            const billEye = document.getElementById('billEyeTransition');
+            billEye.classList.add('active');
+            
+            setTimeout(() => {
+                billEye.classList.remove('active');
+                isTransitioning = false;
+            }, 1200);
+        }
+
+        // Home button functionality
+        function scrollToTop() {
+            showBillEyeTransition();
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 600);
+        }
+
+        // Create particles for hero section
+        function createParticles() {
+            const particlesContainer = document.querySelector('.hero-particles');
+            if (!particlesContainer) return;
+            
+            const particleCount = 60;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = Math.random() * 6 + 2 + 'px';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize all animations
+        function initializeAnimations() {
+            createParticles();
+            setupScrollObserver();
+            setupSmoothScrolling();
+        }
+
+        // Experience card toggle
+        function toggleExperience(card) {
+            const isExpanded = card.classList.contains('expanded');
+            
+            // Close all cards
+            document.querySelectorAll('.experience-card').forEach(c => {
+                c.classList.remove('expanded');
+            });
+            
+            // Expand clicked card if it wasn't expanded
+            if (!isExpanded) {
+                setTimeout(() => {
+                    card.classList.add('expanded');
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }, 200);
+            }
+        }
+
+        // Share profile function
+        function shareProfile() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Esteban Perez Vergara- Portafolio Profesional',
+                    text: 'Conoce el portafolio de Esteban Perez vergara',
+                    url: window.location.href
+                }).then(() => {
+                    showNotification('Portafolio compartido!', 'success');
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showNotification('Enlace copiado al portapapeles!', 'success');
+                });
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'info' ? 'info-circle' : 'exclamation-circle'} me-2"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 4000);
+        }
+
+        // Scroll animations
+        function setupScrollObserver() {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    
+                    if (target) {
+                        if (this.getAttribute('href') !== '#inicio') {
+                            showBillEyeTransition();
+                        }
+                        
+                        setTimeout(() => {
+                            const navHeight = document.querySelector('.navbar').offsetHeight;
+                            const targetPosition = target.offsetTop - navHeight - 30;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }, this.getAttribute('href') !== '#inicio' ? 600 : 0);
+                    }
+                });
+            });
+        }
+
+        // Scroll effects
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('mainNav');
+            const homeButton = document.getElementById('homeButton');
+            const scrolled = window.scrollY;
+            
+            // Navbar effect
+            if (scrolled > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Home button visibility
+            if (scrolled > 500) {
+                homeButton.classList.add('visible');
+            } else {
+                homeButton.classList.remove('visible');
+            }
+
+            // Active navigation link
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 400) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        console.log('Esteban Perez Vergara Portfolio loaded successfully!');
+    </script>
+</body>
+</html>
